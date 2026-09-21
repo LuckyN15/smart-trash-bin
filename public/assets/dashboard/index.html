@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMART BIN IoT Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.11.0/dist/tabler-icons.min.css" />
+  <link rel="stylesheet" href="/dashboard/style.css" />
+</head>
+<body>
+
+<div class="app" role="main" aria-label="SMART BIN IoT Dashboard">
+  <h2 class="sr-only">SMART BIN IoT — Panel pemantauan tempat sampah cerdas</h2>
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🗑️</div>
+      <div>
+        <div class="logo-text">SMART BIN</div>
+        <div class="logo-sub">IoT Dashboard</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="section-label">Utama</div>
+      <div class="nav-item active" data-page="dashboard">
+        <i class="ti ti-layout-dashboard nav-icon" aria-hidden="true"></i>
+        <span class="nav-label">Dashboard</span>
+      </div>
+      <div class="nav-item" data-page="realtime">
+        <i class="ti ti-scan nav-icon" aria-hidden="true"></i>
+        <span class="nav-label">Klasifikasi Real-Time</span>
+      </div>
+      <div class="nav-item" data-page="monitoring">
+        <i class="ti ti-eye nav-icon" aria-hidden="true"></i>
+        <span class="nav-label">Monitoring Sampah</span>
+      </div>
+
+      <div class="section-label">Analitik</div>
+      <div class="nav-item" data-page="statistik">
+        <i class="ti ti-chart-bar nav-icon" aria-hidden="true"></i>
+        <span class="nav-label">Statistik</span>
+      </div>
+      <div class="nav-item" data-page="riwayat">
+        <i class="ti ti-history nav-icon" aria-hidden="true"></i>
+        <span class="nav-label">Riwayat Aktivitas</span>
+      </div>
+
+      <div class="section-label">Sistem</div>
+      <div class="nav-item" data-page="notifikasi" id="notif-nav">
+        <i class="ti ti-bell nav-icon" aria-hidden="true"></i>
+        <span class="nav-label">Notifikasi</span>
+        <span class="nav-badge" id="notif-count">4</span>
+      </div>
+      <div class="nav-item" data-page="pengaturan">
+        <i class="ti ti-settings nav-icon" aria-hidden="true"></i>
+        <span class="nav-label">Pengaturan</span>
+      </div>
+      <div class="nav-item" data-page="tentang">
+        <i class="ti ti-info-circle nav-icon" aria-hidden="true"></i>
+        <span class="nav-label">Tentang Sistem</span>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar">AD</div>
+        <div>
+          <div class="user-name">Admin Utama</div>
+          <div class="user-role">Super Administrator</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN ==================== -->
+  <div class="main">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div>
+        <div class="page-title" id="page-title">Dashboard</div>
+        <div class="page-sub" id="page-sub">Ringkasan kondisi seluruh smart bin</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="tb-btn" onclick="simulateRefresh()">
+          <i class="ti ti-refresh" aria-hidden="true"></i> Refresh
+        </button>
+        <button class="tb-btn" id="time-btn">⏱ Hari ini</button>
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--sb-success);box-shadow:0 0 6px var(--sb-success)" title="Sistem online"></div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- ===================== PAGE: DASHBOARD ===================== -->
+      <div class="page active" id="page-dashboard">
+
+        <!-- Sampah Masuk Terkini -->
+<div class="chart-card" style="margin-top:20px;">
+    <div class="chart-header">
+        <span class="chart-title">
+            <i class="ti ti-recycle"></i>
+            Sampah Masuk Terkini
+        </span>
+        <span class="badge info">Live</span>
+    </div>
+
+    <div style="padding:15px;">
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:12px;
+            background:var(--sb-surface2);
+            border-radius:10px;
+            margin-bottom:10px;
+        ">
+            <div>
+                <div style="font-size:18px;font-weight:600;" id="latest-trash">
+                    Plastik
+                </div>
+                <div style="font-size:12px;color:var(--sb-muted);" id="latest-time">
+                    Terdeteksi 2 menit yang lalu
+                </div>
+            </div>
+
+            <div style="
+                font-size:35px;
+                color:var(--sb-accent);
+            ">
+                ♻️
+            </div>
+        </div>
+
+        <div style="font-size:12px;color:var(--sb-muted);">
+            Menampilkan jenis sampah terakhir yang berhasil diklasifikasikan oleh sistem Smart Bin.
+        </div>
+    </div>
+</div>
+
+        <!-- Stat cards -->
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="stat-label"><i class="ti ti-trash" aria-hidden="true"></i> Total Sampah Aktif</div>
+            <div class="stat-value" style="color:var(--sb-accent)">24</div>
+            <div class="stat-change up">↑ 2 unit baru minggu ini</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label"><i class="ti ti-alert-circle" style="color:var(--sb-danger)" aria-hidden="true"></i> Sampah Penuh</div>
+            <div class="stat-value" style="color:var(--sb-danger)">5</div>
+            <div class="stat-change down">Perlu segera diangkut</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label"><i class="ti ti-alert-triangle" style="color:var(--sb-warn)" aria-hidden="true"></i> Hampir Penuh</div>
+            <div class="stat-value" style="color:var(--sb-warn)">8</div>
+            <div class="stat-change" style="color:var(--sb-warn)">Pantau dalam 2 jam</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label"><i class="ti ti-check" style="color:var(--sb-success)" aria-hidden="true"></i> Sampah Kosong / Aman</div>
+            <div class="stat-value" style="color:var(--sb-success)">11</div>
+            <div class="stat-change up">Kapasitas tersedia</div>
+          </div>
+        </div>
+
+        <!-- Chart row 1 -->
+        <div class="chart-row">
+          <div class="chart-card">
+            <div class="chart-header">
+              <span class="chart-title">Volume Sampah</span>
+              <div class="chart-tabs">
+                <span class="chart-tab active" onclick="switchTab(this,'vol')">Harian</span>
+                <span class="chart-tab" onclick="switchTab(this,'vol')">Mingguan</span>
+                <span class="chart-tab" onclick="switchTab(this,'vol')">Bulanan</span>
+              </div>
+            </div>
+            <div style="position:relative;height:110px">
+              <canvas id="volChart" role="img" aria-label="Grafik volume sampah harian">Volume harian meningkat.</canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <span class="chart-title">Kategori Sampah</span>
+              <span class="badge info">Hari ini</span>
+            </div>
+            <div style="position:relative;height:110px">
+              <canvas id="catChart" role="img" aria-label="Distribusi kategori sampah">Plastik terbanyak.</canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Peta + Status Koneksi -->
+        <div class="chart-row">
+          <div class="chart-card" style="position:relative">
+            <div class="chart-header"><span class="chart-title">Peta Lokasi Sampah</span></div>
+            <div class="mini-map" id="binMap">
+              <svg class="map-grid" viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <pattern id="grid" width="30" height="24" patternUnits="userSpaceOnUse">
+                    <path d="M 30 0 L 0 0 0 24" fill="none" stroke="var(--sb-text)" stroke-width="0.5"/>
+                  </pattern>
+                </defs>
+                <rect width="300" height="120" fill="url(#grid)"/>
+              </svg>
+              <div class="map-pin" style="left:22%;top:35%;background:var(--sb-danger)" title="BIN-03 — Penuh"></div>
+              <div class="map-pin" style="left:38%;top:55%;background:var(--sb-success)" title="BIN-07 — Aman"></div>
+              <div class="map-pin" style="left:55%;top:30%;background:var(--sb-warn)" title="BIN-12 — Hampir penuh"></div>
+              <div class="map-pin" style="left:68%;top:65%;background:var(--sb-success)" title="BIN-18 — Aman"></div>
+              <div class="map-pin" style="left:82%;top:40%;background:var(--sb-danger)" title="BIN-22 — Penuh"></div>
+              <div class="map-pin" style="left:47%;top:75%;background:var(--sb-muted)" title="BIN-09 — Offline"></div>
+              <div style="position:absolute;bottom:6px;right:8px;display:flex;gap:8px;font-size:10px">
+                <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--sb-danger);vertical-align:middle"></span> Penuh</span>
+                <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--sb-warn);vertical-align:middle"></span> Hampir</span>
+                <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--sb-success);vertical-align:middle"></span> Aman</span>
+              </div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><span class="chart-title">Status Koneksi IoT</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--sb-border)">
+                <span style="font-size:12px">Online</span>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <div class="prog-bar" style="width:80px"><div class="prog-fill ok" style="width:87.5%"></div></div>
+                  <span style="font-size:12px;color:var(--sb-success);font-weight:500">21</span>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--sb-border)">
+                <span style="font-size:12px">Offline</span>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <div class="prog-bar" style="width:80px"><div class="prog-fill full" style="width:12.5%"></div></div>
+                  <span style="font-size:12px;color:var(--sb-danger);font-weight:500">3</span>
+                </div>
+              </div>
+              <div style="padding-top:6px">
+                <div style="font-size:11px;color:var(--sb-muted);margin-bottom:6px">Notifikasi terbaru</div>
+                <div style="font-size:12px;padding:5px 8px;background:rgba(248,81,73,0.08);border-radius:5px;margin-bottom:4px;border-left:2px solid var(--sb-danger)">BIN-03 Pasar Baru — Penuh <span style="color:var(--sb-muted)">2m lalu</span></div>
+                <div style="font-size:12px;padding:5px 8px;background:rgba(227,179,65,0.08);border-radius:5px;margin-bottom:4px;border-left:2px solid var(--sb-warn)">BIN-09 Taman Kota — Offline <span style="color:var(--sb-muted)">15m lalu</span></div>
+                <div style="font-size:12px;padding:5px 8px;background:rgba(248,81,73,0.08);border-radius:5px;border-left:2px solid var(--sb-danger)">BIN-22 Mall Raya — Penuh <span style="color:var(--sb-muted)">28m lalu</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Efisiensi Pengangkutan -->
+        <div class="full-chart">
+          <div class="chart-header">
+            <span class="chart-title">Efisiensi Pengangkutan</span>
+            <span style="font-size:11px;color:var(--sb-muted)">Bulan ini</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <div style="text-align:center;padding:10px;background:var(--sb-surface2);border-radius:6px">
+              <div style="font-size:20px;font-weight:600;color:var(--sb-accent)">94.2%</div>
+              <div style="font-size:11px;color:var(--sb-muted);margin-top:3px">Tepat waktu</div>
+            </div>
+            <div style="text-align:center;padding:10px;background:var(--sb-surface2);border-radius:6px">
+              <div style="font-size:20px;font-weight:600;color:var(--sb-info)">2.4t</div>
+              <div style="font-size:11px;color:var(--sb-muted);margin-top:3px">Total diangkut</div>
+            </div>
+            <div style="text-align:center;padding:10px;background:var(--sb-surface2);border-radius:6px">
+              <div style="font-size:20px;font-weight:600;color:var(--sb-success)">87</div>
+              <div style="font-size:11px;color:var(--sb-muted);margin-top:3px">Trip selesai</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end page-dashboard -->
+
+      <!-- ===================== PAGE: REALTIME ===================== -->
+      <div class="page" id="page-realtime">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div class="chart-card">
+            <div class="chart-header">
+              <span class="chart-title">Deteksi Langsung</span>
+              <span class="badge ok"><span class="dot"></span> Live</span>
+            </div>
+            <div style="background:var(--sb-surface2);border-radius:6px;height:100px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;position:relative;overflow:hidden">
+              <div id="scan-box" style="width:60px;height:60px;border:2px solid var(--sb-accent);border-radius:4px;position:absolute;animation:scanBox 2s infinite"></div>
+              <div style="font-size:11px;color:var(--sb-muted);position:absolute;bottom:6px">Kamera BIN-07 · Aktif</div>
+              <div style="font-size:32px" id="detected-emoji">🧴</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-size:14px;font-weight:600;color:var(--sb-accent)" id="detected-class">Plastik</div>
+              <div style="font-size:11px;color:var(--sb-muted);margin-top:2px">Terdeteksi 3 detik lalu</div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><span class="chart-title">Confidence Score AI</span></div>
+            <div class="rt-feed" style="padding:0;background:transparent;border:none">
+              <div class="rt-item"><span class="rt-cat">Plastik</span><div class="rt-bar"><div class="rt-bar-fill" style="width:91%;background:#2196f3"></div></div><span class="rt-score">91%</span></div>
+              <div class="rt-item"><span class="rt-cat">Organik</span><div class="rt-bar"><div class="rt-bar-fill" style="width:4%;background:#3fb950"></div></div><span class="rt-score">4%</span></div>
+              <div class="rt-item"><span class="rt-cat">Kertas</span><div class="rt-bar"><div class="rt-bar-fill" style="width:3%;background:#e3b341"></div></div><span class="rt-score">3%</span></div>
+              <div class="rt-item"><span class="rt-cat">Logam</span><div class="rt-bar"><div class="rt-bar-fill" style="width:1%;background:#8b949e"></div></div><span class="rt-score">1%</span></div>
+              <div class="rt-item"><span class="rt-cat">Anorganik</span><div class="rt-bar"><div class="rt-bar-fill" style="width:1%;background:#f85149"></div></div><span class="rt-score">1%</span></div>
+            </div>
+            <div style="margin-top:8px;padding:6px 10px;border-radius:6px;background:rgba(63,185,80,0.1);border:1px solid rgba(63,185,80,0.3);font-size:12px;color:var(--sb-success);display:flex;align-items:center;gap:5px">
+              <i class="ti ti-check" aria-hidden="true"></i> Klasifikasi berhasil
+            </div>
+          </div>
+        </div>
+
+        <div class="search-bar">
+          <input class="search-input" placeholder="🔍  Cari histori klasifikasi...">
+          <select class="filter-sel">
+            <option>Semua Kategori</option>
+            <option>Plastik</option><option>Organik</option><option>Kertas</option>
+            <option>Logam</option><option>Kaca</option><option>Anorganik</option>
+          </select>
+          <select class="filter-sel">
+            <option>Hari ini</option><option>Minggu ini</option><option>Bulan ini</option>
+          </select>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">Histori Klasifikasi</span>
+            <span style="font-size:11px;color:var(--sb-muted)">128 entri hari ini</span>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr><th>Waktu</th><th>Perangkat</th><th>Kategori</th><th>Confidence</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td style="color:var(--sb-muted)">14:32:05</td><td>BIN-07</td><td><span class="badge info">Plastik</span></td><td>91%</td><td><span class="badge ok">Berhasil</span></td></tr>
+              <tr><td style="color:var(--sb-muted)">14:31:42</td><td>BIN-03</td><td><span class="badge" style="background:rgba(63,185,80,0.15);color:var(--sb-success)">Organik</span></td><td>88%</td><td><span class="badge ok">Berhasil</span></td></tr>
+              <tr><td style="color:var(--sb-muted)">14:31:18</td><td>BIN-12</td><td><span class="badge near">Kertas</span></td><td>76%</td><td><span class="badge ok">Berhasil</span></td></tr>
+              <tr><td style="color:var(--sb-muted)">14:30:55</td><td>BIN-22</td><td><span class="badge" style="background:rgba(139,148,158,0.15);color:var(--sb-muted)">Logam</span></td><td>42%</td><td><span class="badge full">Gagal</span></td></tr>
+              <tr><td style="color:var(--sb-muted)">14:30:31</td><td>BIN-07</td><td><span class="badge info">Kaca</span></td><td>95%</td><td><span class="badge ok">Berhasil</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div><!-- end page-realtime -->
+
+      <!-- ===================== PAGE: MONITORING ===================== -->
+      <div class="page" id="page-monitoring">
+        <div class="search-bar">
+          <input class="search-input" placeholder="🔍  Cari ID atau lokasi sampah...">
+          <select class="filter-sel"><option>Semua Status</option><option>Penuh</option><option>Hampir Penuh</option><option>Kosong/Aman</option></select>
+          <select class="filter-sel"><option>Semua Area</option><option>Pusat Kota</option><option>Pasar</option><option>Taman</option></select>
+          <button class="tb-btn" style="background:var(--sb-surface2)"><i class="ti ti-map" aria-hidden="true"></i> Peta</button>
+        </div>
+
+        <div class="chart-card" style="padding:0">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID Perangkat</th><th>Lokasi</th><th>Kapasitas</th>
+                <th>Suhu/Kelembaban</th><th>Baterai</th><th>Terakhir Update</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="bin-table-body">
+              <tr>
+                <td style="font-weight:500">BIN-03</td>
+                <td>Pasar Baru Lt.1</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar" style="width:60px"><div class="prog-fill full" style="width:92%"></div></div><span style="color:var(--sb-danger);font-weight:500">92%</span></div></td>
+                <td><span style="color:var(--sb-muted)">31°C / 68%</span></td>
+                <td><span style="color:var(--sb-success)">🔋 85%</span></td>
+                <td style="color:var(--sb-muted)">2m lalu</td>
+                <td><span class="badge full"><span class="dot"></span> Penuh</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">BIN-07</td>
+                <td>Taman Monumen</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar" style="width:60px"><div class="prog-fill ok" style="width:24%"></div></div><span style="color:var(--sb-success);font-weight:500">24%</span></div></td>
+                <td><span style="color:var(--sb-muted)">29°C / 72%</span></td>
+                <td><span style="color:var(--sb-success)">🔋 92%</span></td>
+                <td style="color:var(--sb-muted)">1m lalu</td>
+                <td><span class="badge ok"><span class="dot"></span> Kosong</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">BIN-12</td>
+                <td>Jl. Sudirman 45</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar" style="width:60px"><div class="prog-fill near" style="width:68%"></div></div><span style="color:var(--sb-warn);font-weight:500">68%</span></div></td>
+                <td><span style="color:var(--sb-muted)">28°C / 65%</span></td>
+                <td><span style="color:var(--sb-warn)">🔋 41%</span></td>
+                <td style="color:var(--sb-muted)">5m lalu</td>
+                <td><span class="badge near"><span class="dot"></span> Hampir Penuh</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">BIN-09</td>
+                <td>Taman Kota Barat</td>
+                <td><span style="color:var(--sb-muted)">— tidak tersedia</span></td>
+                <td><span style="color:var(--sb-muted)">—</span></td>
+                <td><span style="color:var(--sb-danger)">🔋 12%</span></td>
+                <td style="color:var(--sb-muted)">15m lalu</td>
+                <td><span class="badge offline"><span class="dot"></span> Offline</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">BIN-22</td>
+                <td>Mall Raya Gatot</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar" style="width:60px"><div class="prog-fill full" style="width:87%"></div></div><span style="color:var(--sb-danger);font-weight:500">87%</span></div></td>
+                <td><span style="color:var(--sb-muted)">33°C / 55%</span></td>
+                <td><span style="color:var(--sb-success)">🔋 78%</span></td>
+                <td style="color:var(--sb-muted)">8m lalu</td>
+                <td><span class="badge full"><span class="dot"></span> Penuh</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight:500">BIN-18</td>
+                <td>Kantor Walikota</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-bar" style="width:60px"><div class="prog-fill ok" style="width:35%"></div></div><span style="color:var(--sb-success);font-weight:500">35%</span></div></td>
+                <td><span style="color:var(--sb-muted)">27°C / 60%</span></td>
+                <td><span style="color:var(--sb-success)">🔋 95%</span></td>
+                <td style="color:var(--sb-muted)">3m lalu</td>
+                <td><span class="badge ok"><span class="dot"></span> Kosong</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div><!-- end page-monitoring -->
+
+      <!-- ===================== PAGE: STATISTIK ===================== -->
+      <div class="page" id="page-statistik">
+        <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center">
+          <select class="filter-sel"><option>Semua Lokasi</option><option>Pusat Kota</option><option>Pasar</option></select>
+          <input type="date" style="padding:7px 10px;background:var(--sb-surface);border:1px solid var(--sb-border);border-radius:6px;color:var(--sb-text);font-size:12px">
+          <span style="color:var(--sb-muted)">—</span>
+          <input type="date" style="padding:7px 10px;background:var(--sb-surface);border:1px solid var(--sb-border);border-radius:6px;color:var(--sb-text);font-size:12px">
+          <div style="flex:1"></div>
+          <button class="tb-btn" onclick="exportReport('PDF')"><i class="ti ti-file-text" aria-hidden="true"></i> Ekspor PDF</button>
+          <button class="tb-btn" onclick="exportReport('Excel')"><i class="ti ti-table" aria-hidden="true"></i> Ekspor Excel</button>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-card">
+            <div class="chart-header">
+              <span class="chart-title">Volume per Kategori</span>
+              <div class="chart-tabs">
+                <span class="chart-tab active">Minggu ini</span>
+                <span class="chart-tab">Bulan</span>
+              </div>
+            </div>
+            <div style="position:relative;height:120px">
+              <canvas id="statCatChart" role="img" aria-label="Volume sampah per kategori">Plastik mendominasi.</canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><span class="chart-title">Tren Volume Harian</span></div>
+            <div style="position:relative;height:120px">
+              <canvas id="trendChart" role="img" aria-label="Tren volume sampah harian 7 hari">Meningkat di akhir pekan.</canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-card">
+            <div class="chart-header"><span class="chart-title">Akurasi Klasifikasi AI</span></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div style="text-align:center;padding:12px;background:var(--sb-surface2);border-radius:6px">
+                <div style="font-size:22px;font-weight:600;color:var(--sb-success)">93.7%</div>
+                <div style="font-size:10px;color:var(--sb-muted)">Akurasi keseluruhan</div>
+              </div>
+              <div style="text-align:center;padding:12px;background:var(--sb-surface2);border-radius:6px">
+                <div style="font-size:22px;font-weight:600;color:var(--sb-info)">1,284</div>
+                <div style="font-size:10px;color:var(--sb-muted)">Total klasifikasi</div>
+              </div>
+              <div style="text-align:center;padding:12px;background:var(--sb-surface2);border-radius:6px">
+                <div style="font-size:22px;font-weight:600;color:var(--sb-success)">1,203</div>
+                <div style="font-size:10px;color:var(--sb-muted)">Berhasil</div>
+              </div>
+              <div style="text-align:center;padding:12px;background:var(--sb-surface2);border-radius:6px">
+                <div style="font-size:22px;font-weight:600;color:var(--sb-danger)">81</div>
+                <div style="font-size:10px;color:var(--sb-muted)">Gagal</div>
+              </div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><span class="chart-title">Volume per Lokasi</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:3px;font-size:12px"><span>Pasar Baru</span><span style="color:var(--sb-muted)">428 kg</span></div><div class="prog-bar"><div class="prog-fill full" style="width:85%"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:3px;font-size:12px"><span>Mall Raya</span><span style="color:var(--sb-muted)">312 kg</span></div><div class="prog-bar"><div class="prog-fill near" style="width:62%"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:3px;font-size:12px"><span>Jl. Sudirman</span><span style="color:var(--sb-muted)">241 kg</span></div><div class="prog-bar"><div class="prog-fill near" style="width:48%"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:3px;font-size:12px"><span>Taman Monumen</span><span style="color:var(--sb-muted)">187 kg</span></div><div class="prog-bar"><div class="prog-fill ok" style="width:37%"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div><!-- end page-statistik -->
+
+      <!-- ===================== PAGE: RIWAYAT ===================== -->
+      <div class="page" id="page-riwayat">
+        <div class="search-bar">
+          <input class="search-input" placeholder="🔍  Cari aktivitas...">
+          <select class="filter-sel"><option>Semua Tipe</option><option>Login/Logout</option><option>Perangkat IoT</option><option>Klasifikasi</option><option>Pengaturan</option></select>
+          <select class="filter-sel"><option>Hari ini</option><option>Minggu ini</option><option>Bulan ini</option></select>
+          <button class="tb-btn" onclick="exportReport('CSV')"><i class="ti ti-download" aria-hidden="true"></i> Ekspor</button>
+        </div>
+
+        <div class="chart-card">
+          <div style="font-size:11px;color:var(--sb-muted);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--sb-border)">128 entri — Senin 16 Juni 2025</div>
+          <div id="activity-log">
+            <div class="log-item"><div class="log-icon-wrap" style="background:rgba(63,185,80,0.15)">🔐</div><div class="log-body"><div class="log-msg">Admin Utama berhasil login ke sistem</div><div class="log-meta">14:30:00 · Login Pengguna · IP: 192.168.1.10</div></div></div>
+            <div class="log-item"><div class="log-icon-wrap" style="background:rgba(248,81,73,0.15)">⚠️</div><div class="log-body"><div class="log-msg">BIN-03 mencapai kapasitas penuh (92%)</div><div class="log-meta">14:28:15 · Perangkat IoT · BIN-03 · Pasar Baru</div></div></div>
+            <div class="log-item"><div class="log-icon-wrap" style="background:rgba(88,166,255,0.15)">🤖</div><div class="log-body"><div class="log-msg">Klasifikasi berhasil: Plastik (confidence 91%) di BIN-07</div><div class="log-meta">14:32:05 · Klasifikasi AI · Model v2.4.1</div></div></div>
+            <div class="log-item"><div class="log-icon-wrap" style="background:rgba(139,148,158,0.15)">📡</div><div class="log-body"><div class="log-msg">BIN-09 kehilangan koneksi MQTT</div><div class="log-meta">14:15:33 · Perangkat IoT · BIN-09 · Taman Kota Barat</div></div></div>
+            <div class="log-item"><div class="log-icon-wrap" style="background:rgba(227,179,65,0.15)">⚡</div><div class="log-body"><div class="log-msg">BIN-09 baterai lemah (12%) — peringatan dikirim</div><div class="log-meta">14:10:21 · Perangkat IoT · BIN-09</div></div></div>
+            <div class="log-item"><div class="log-icon-wrap" style="background:rgba(63,185,80,0.15)">✅</div><div class="log-body"><div class="log-msg">BIN-22 diangkut oleh Petugas Andi — kapasitas reset 0%</div><div class="log-meta">13:45:00 · Aktivitas Pengangkutan · Petugas: Andi Rahman</div></div></div>
+            <div class="log-item"><div class="log-icon-wrap" style="background:rgba(88,166,255,0.15)">⚙️</div><div class="log-body"><div class="log-msg">Admin mengubah batas kapasitas dari 85% ke 80%</div><div class="log-meta">11:20:45 · Perubahan Pengaturan · Admin Utama</div></div></div>
+          </div>
+        </div>
+      </div><!-- end page-riwayat -->
+
+      <!-- ===================== PAGE: NOTIFIKASI ===================== -->
+      <div class="page" id="page-notifikasi">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="display:flex;gap:8px">
+            <button class="tb-btn" onclick="markAllRead()"><i class="ti ti-check" aria-hidden="true"></i> Tandai semua dibaca</button>
+            <select class="filter-sel"><option>Semua Jenis</option><option>Bin Penuh</option><option>Perangkat Offline</option><option>Baterai Lemah</option><option>Gagal Klasifikasi</option></select>
+          </div>
+          <span id="unread-label" style="font-size:12px;color:var(--sb-muted)">4 belum dibaca</span>
+        </div>
+
+        <div id="notif-list">
+          <div class="notif-item unread" id="notif-1">
+            <div class="notif-icon" style="background:rgba(248,81,73,0.15)">🗑️</div>
+            <div class="notif-body">
+              <div class="notif-title">BIN-03 Penuh — Pasar Baru Lt.1</div>
+              <div class="notif-desc">Kapasitas mencapai 92%. Segera jadwalkan pengangkutan.</div>
+              <div class="notif-time">2 menit lalu · 14:30</div>
+              <div class="notif-actions">
+                <button class="notif-btn" onclick="markRead('notif-1')">Tandai dibaca</button>
+                <button class="notif-btn" onclick="deleteNotif('notif-1')">Hapus</button>
+              </div>
+            </div>
+          </div>
+          <div class="notif-item unread" id="notif-2">
+            <div class="notif-icon" style="background:rgba(139,148,158,0.15)">📡</div>
+            <div class="notif-body">
+              <div class="notif-title">BIN-09 Offline — Taman Kota Barat</div>
+              <div class="notif-desc">Perangkat tidak merespons sejak 15 menit lalu. Periksa koneksi.</div>
+              <div class="notif-time">15 menit lalu · 14:17</div>
+              <div class="notif-actions">
+                <button class="notif-btn" onclick="markRead('notif-2')">Tandai dibaca</button>
+                <button class="notif-btn" onclick="deleteNotif('notif-2')">Hapus</button>
+              </div>
+            </div>
+          </div>
+          <div class="notif-item unread" id="notif-3">
+            <div class="notif-icon" style="background:rgba(227,179,65,0.15)">🔋</div>
+            <div class="notif-body">
+              <div class="notif-title">Baterai BIN-09 kritis (12%)</div>
+              <div class="notif-desc">Level baterai di bawah batas minimum. Segera isi daya atau ganti baterai.</div>
+              <div class="notif-time">32 menit lalu · 14:00</div>
+              <div class="notif-actions">
+                <button class="notif-btn" onclick="markRead('notif-3')">Tandai dibaca</button>
+                <button class="notif-btn" onclick="deleteNotif('notif-3')">Hapus</button>
+              </div>
+            </div>
+          </div>
+          <div class="notif-item unread" id="notif-4">
+            <div class="notif-icon" style="background:rgba(248,81,73,0.15)">❌</div>
+            <div class="notif-body">
+              <div class="notif-title">Klasifikasi gagal — BIN-22</div>
+              <div class="notif-desc">Confidence score terlalu rendah (42%). Objek tidak dapat diklasifikasikan.</div>
+              <div class="notif-time">1 jam lalu · 13:32</div>
+              <div class="notif-actions">
+                <button class="notif-btn" onclick="markRead('notif-4')">Tandai dibaca</button>
+                <button class="notif-btn" onclick="deleteNotif('notif-4')">Hapus</button>
+              </div>
+            </div>
+          </div>
+          <div class="notif-item" id="notif-5" style="opacity:0.6">
+            <div class="notif-icon" style="background:rgba(63,185,80,0.15)">✅</div>
+            <div class="notif-body">
+              <div class="notif-title">BIN-22 berhasil diangkut</div>
+              <div class="notif-desc">Kapasitas direset ke 0% oleh Petugas Andi Rahman.</div>
+              <div class="notif-time">3 jam lalu · 11:45</div>
+              <div class="notif-actions">
+                <button class="notif-btn" onclick="deleteNotif('notif-5')">Hapus</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- end page-notifikasi -->
+
+      <!-- ===================== PAGE: PENGATURAN ===================== -->
+      <div class="page" id="page-pengaturan">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <!-- Kolom kiri -->
+          <div>
+            <div class="settings-section">
+              <div class="settings-title"><i class="ti ti-user-circle" aria-hidden="true"></i> Profil Pengguna</div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div><label style="font-size:11px;color:var(--sb-muted)">Nama Lengkap</label><input type="text" value="Admin Utama" style="margin-top:3px"></div>
+                <div><label style="font-size:11px;color:var(--sb-muted)">Email</label><input type="email" value="admin@smartbin.id" style="margin-top:3px"></div>
+                <div><label style="font-size:11px;color:var(--sb-muted)">Password baru</label><input type="password" placeholder="••••••••" style="margin-top:3px"></div>
+                <div style="display:flex;gap:6px;margin-top:4px">
+                  <button class="btn-primary">Simpan perubahan</button>
+                  <button class="btn-secondary">Batal</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <div class="settings-title"><i class="ti ti-bell" aria-hidden="true"></i> Pengaturan Notifikasi</div>
+              <div class="settings-row"><div><div class="settings-label">Sampah penuh</div><div class="settings-hint">Alert saat kapasitas > 80%</div></div><div class="toggle on" onclick="this.classList.toggle('on')" role="switch" aria-label="Toggle notifikasi bin penuh"></div></div>
+              <div class="settings-row"><div><div class="settings-label">Perangkat offline</div><div class="settings-hint">Alert jika koneksi putus > 5 menit</div></div><div class="toggle on" onclick="this.classList.toggle('on')" role="switch" aria-label="Toggle notifikasi perangkat offline"></div></div>
+              <div class="settings-row"><div><div class="settings-label">Baterai lemah</div><div class="settings-hint">Alert saat baterai < 20%</div></div><div class="toggle on" onclick="this.classList.toggle('on')" role="switch" aria-label="Toggle notifikasi baterai"></div></div>
+              <div class="settings-row"><div><div class="settings-label">Gagal klasifikasi</div><div class="settings-hint">Alert jika confidence < 50%</div></div><div class="toggle" onclick="this.classList.toggle('on')" role="switch" aria-label="Toggle notifikasi gagal klasifikasi"></div></div>
+            </div>
+          </div>
+
+          <!-- Kolom kanan -->
+          <div>
+            <div class="settings-section">
+              <div class="settings-title"><i class="ti ti-users" aria-hidden="true"></i> Manajemen Pengguna</div>
+              <table class="data-table" style="font-size:11.5px">
+                <thead><tr><th>Nama</th><th>Role</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>Admin Utama</td><td><span class="badge info">Admin</span></td><td><span class="badge ok">Aktif</span></td></tr>
+                  <tr><td>Budi Santoso</td><td><span class="badge near">Petugas</span></td><td><span class="badge ok">Aktif</span></td></tr>
+                  <tr><td>Citra Lestari</td><td><span class="badge" style="background:rgba(139,148,158,0.15);color:var(--sb-muted)">Viewer</span></td><td><span class="badge ok">Aktif</span></td></tr>
+                </tbody>
+              </table>
+              <button class="tb-btn" style="margin-top:8px;width:100%;justify-content:center"><i class="ti ti-plus" aria-hidden="true"></i> Tambah pengguna</button>
+            </div>
+
+            <div class="settings-section">
+              <div class="settings-title"><i class="ti ti-adjustments" aria-hidden="true"></i> Ambang Batas &amp; Integrasi</div>
+              <div class="settings-row"><div><div class="settings-label">Batas kapasitas warning</div></div><input type="range" min="50" max="95" value="80" style="width:80px" oninput="document.getElementById('cap-val').textContent=this.value+'%'"><span id="cap-val" style="font-size:12px;min-width:30px">80%</span></div>
+              <div class="settings-row"><div><div class="settings-label">MQTT Broker</div></div><span style="font-size:11px;color:var(--sb-success)">● Terhubung</span></div>
+              <div class="settings-row"><div><div class="settings-label">Tema antarmuka</div></div>
+                <select class="filter-sel" style="font-size:11px"><option>Dark (Aktif)</option><option>Light</option><option>Auto</option></select>
+              </div>
+              <div class="settings-row"><div><div class="settings-label">Bahasa</div></div>
+                <select class="filter-sel" style="font-size:11px"><option>Bahasa Indonesia</option><option>English</option></select>
+              </div>
+            </div>
+
+            <div class="settings-section">
+              <div class="settings-title"><i class="ti ti-database" aria-hidden="true"></i> Backup &amp; Restore</div>
+              <div style="display:flex;gap:8px">
+                <button class="btn-primary" style="flex:1" onclick="alert('Backup database dimulai...')"><i class="ti ti-download" aria-hidden="true"></i> Backup sekarang</button>
+                <button class="btn-secondary" style="flex:1" onclick="alert('Pilih file backup untuk restore')"><i class="ti ti-upload" aria-hidden="true"></i> Restore</button>
+              </div>
+              <div style="font-size:11px;color:var(--sb-muted);margin-top:8px">Backup terakhir: Senin, 16 Jun 2025 · 06:00 WIB</div>
+            </div>
+          </div>
+        </div>
+      </div><!-- end page-pengaturan -->
+
+      <!-- ===================== PAGE: TENTANG ===================== -->
+      <div class="page" id="page-tentang">
+        <div class="about-hero">
+          <div style="font-size:40px;margin-bottom:10px">🗑️</div>
+          <div style="font-size:20px;font-weight:600;margin-bottom:4px">SMART BIN IoT</div>
+          <div style="font-size:12px;color:var(--sb-muted);margin-bottom:12px">Sistem Manajemen Tempat Sampah Cerdas Berbasis Internet of Things</div>
+          <div style="display:inline-flex;gap:8px">
+            <span class="badge info">v2.4.1</span>
+            <span class="badge ok">Stabil</span>
+            <span class="badge" style="background:rgba(0,212,170,0.15);color:var(--sb-accent)">Open Beta</span>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+          <div class="chart-card">
+            <div class="chart-title" style="margin-bottom:10px">Fitur Utama</div>
+            <div style="display:flex;flex-direction:column;gap:7px;font-size:12px">
+              <div style="display:flex;gap:8px;align-items:center"><i class="ti ti-scan" style="color:var(--sb-accent)" aria-hidden="true"></i> Klasifikasi sampah AI real-time</div>
+              <div style="display:flex;gap:8px;align-items:center"><i class="ti ti-wifi" style="color:var(--sb-info)" aria-hidden="true"></i> Monitoring IoT 24/7 via MQTT</div>
+              <div style="display:flex;gap:8px;align-items:center"><i class="ti ti-chart-line" style="color:var(--sb-success)" aria-hidden="true"></i> Analitik &amp; laporan komprehensif</div>
+              <div style="display:flex;gap:8px;align-items:center"><i class="ti ti-bell" style="color:var(--sb-warn)" aria-hidden="true"></i> Sistem notifikasi otomatis</div>
+              <div style="display:flex;gap:8px;align-items:center"><i class="ti ti-map" style="color:var(--sb-danger)" aria-hidden="true"></i> Peta lokasi bin interaktif</div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title" style="margin-bottom:10px">Informasi Pengembang</div>
+            <div style="font-size:12px;display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--sb-muted)">Tim</span><span>SmartCity Research Lab</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--sb-muted)">Versi</span><span>2.4.1 (Build 2025.06)</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--sb-muted)">Framework</span><span>React + Node.js + MQTT</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--sb-muted)">AI Model</span><span>YOLOv8-Waste v2.1</span></div>
+              <div style="display:flex;justify-content:space-between"><span style="color:var(--sb-muted)">Lisensi</span><span>MIT Open Source</span></div>
+              <div style="margin-top:8px;padding:6px;background:var(--sb-surface2);border-radius:5px">
+                <a href="mailto:support@smartbin.id" style="color:var(--sb-accent);font-size:12px">✉ support@smartbin.id</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px">
+          <div style="font-size:13px;font-weight:500;margin-bottom:8px">FAQ</div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Bagaimana cara menambah perangkat bin baru? <i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+            <div class="faq-a">Masuk ke menu Pengaturan → Manajemen Perangkat → klik "Tambah Bin". Masukkan ID perangkat, lokasi, dan konfigurasikan MQTT topic yang sesuai.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Apa yang harus dilakukan jika bin offline? <i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+            <div class="faq-a">Periksa koneksi jaringan perangkat, pastikan power supply normal, dan verifikasi konfigurasi MQTT broker. Jika masalah berlanjut, restart perangkat.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">Mengapa confidence score klasifikasi rendah? <i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+            <div class="faq-a">Bisa disebabkan oleh pencahayaan kurang, lensa kamera kotor, atau objek yang tidak termasuk dalam dataset training. Bersihkan kamera dan pastikan pencahayaan cukup.</div>
+          </div>
+        </div>
+      </div><!-- end page-tentang -->
+
+    </div><!-- end content -->
+  </div><!-- end main -->
+</div><!-- end app -->
+
+<!-- ==================== SCRIPTS ==================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ---- Navigation ---- */
+const pages = {
+  'dashboard':   { title: 'Dashboard',                  sub: 'Ringkasan kondisi seluruh smart bin' },
+  'realtime':    { title: 'Klasifikasi Real-Time',       sub: 'Deteksi dan klasifikasi sampah secara langsung' },
+  'monitoring':  { title: 'Monitoring Tempat Sampah',   sub: 'Status dan kondisi seluruh perangkat bin' },
+  'statistik':   { title: 'Statistik & Analitik',       sub: 'Grafik dan laporan performa sistem' },
+  'riwayat':     { title: 'Riwayat Aktivitas',          sub: 'Log seluruh aktivitas sistem dan pengguna' },
+  'notifikasi':  { title: 'Notifikasi',                 sub: 'Peringatan dan pemberitahuan sistem' },
+  'pengaturan':  { title: 'Pengaturan',                 sub: 'Konfigurasi sistem dan manajemen pengguna' },
+  'tentang':     { title: 'Tentang Sistem',             sub: 'Informasi aplikasi dan dukungan teknis' }
+};
+
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const p = item.dataset.page;
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(pg => pg.classList.remove('active'));
+    item.classList.add('active');
+    document.getElementById('page-' + p).classList.add('active');
+    document.getElementById('page-title').textContent = pages[p].title;
+    document.getElementById('page-sub').textContent   = pages[p].sub;
+    if (p === 'statistik') setTimeout(initStatCharts, 100);
+  });
+});
+
+/* ---- Dashboard Charts ---- */
+let chartsInit = false;
+function initCharts() {
+  if (chartsInit) return;
+  chartsInit = true;
+
+  new Chart(document.getElementById('volChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Sen','Sel','Rab','Kam','Jum','Sab','Min'],
+      datasets: [{ label: 'Volume (kg)', data: [145,180,132,210,195,265,178], backgroundColor: 'rgba(0,212,170,0.7)', borderRadius: 3 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#8b949e', font: { size: 10 } }, grid: { display: false } },
+        y: { ticks: { color: '#8b949e', font: { size: 10 } }, grid: { color: 'rgba(48,54,61,0.5)' } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('catChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Plastik','Organik','Kertas','Logam','Kaca'],
+      datasets: [{ data: [35,25,20,12,8], backgroundColor: ['#2196f3','#3fb950','#e3b341','#8b949e','#58a6ff'], borderWidth: 0 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      cutout: '60%'
+    }
+  });
+}
+
+/* ---- Statistik Charts ---- */
+let statChartsInit = false;
+function initStatCharts() {
+  if (statChartsInit) return;
+  statChartsInit = true;
+
+  new Chart(document.getElementById('statCatChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Plastik','Organik','Kertas','Logam','Kaca','Anorg.'],
+      datasets: [{ data: [428,312,241,187,98,74], backgroundColor: ['#2196f3','#3fb950','#e3b341','#8b949e','#58a6ff','#f85149'], borderRadius: 3 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#8b949e', font: { size: 10 } }, grid: { display: false } },
+        y: { ticks: { color: '#8b949e', font: { size: 10 } }, grid: { color: 'rgba(48,54,61,0.5)' } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+      labels: ['Sen','Sel','Rab','Kam','Jum','Sab','Min'],
+      datasets: [{
+        label: 'Volume', data: [145,180,132,210,195,265,178],
+        borderColor: '#00d4aa', backgroundColor: 'rgba(0,212,170,0.08)',
+        fill: true, tension: 0.4, pointBackgroundColor: '#00d4aa', pointRadius: 3
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: '#8b949e', font: { size: 10 } }, grid: { display: false } },
+        y: { ticks: { color: '#8b949e', font: { size: 10 } }, grid: { color: 'rgba(48,54,61,0.5)' } }
+      }
+    }
+  });
+}
+
+setTimeout(initCharts, 300);
+
+/* ---- Notifications ---- */
+let unreadCount = 4;
+
+function markRead(id) {
+  const el = document.getElementById(id);
+  if (el && el.classList.contains('unread')) {
+    el.classList.remove('unread');
+    el.style.opacity = '0.6';
+    unreadCount = Math.max(0, unreadCount - 1);
+    document.getElementById('notif-count').textContent = unreadCount;
+    document.getElementById('unread-label').textContent = unreadCount + ' belum dibaca';
+    if (unreadCount === 0) document.getElementById('notif-count').style.display = 'none';
+  }
+}
+
+function deleteNotif(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    if (el.classList.contains('unread')) {
+      unreadCount = Math.max(0, unreadCount - 1);
+      document.getElementById('notif-count').textContent = unreadCount;
+      document.getElementById('unread-label').textContent = unreadCount + ' belum dibaca';
+    }
+    el.style.transition = 'opacity 0.3s';
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 300);
+  }
+}
+
+function markAllRead() {
+  document.querySelectorAll('.notif-item.unread').forEach(el => {
+    el.classList.remove('unread');
+    el.style.opacity = '0.6';
+  });
+  unreadCount = 0;
+  document.getElementById('notif-count').style.display = 'none';
+  document.getElementById('unread-label').textContent = 'Semua sudah dibaca';
+}
+
+/* ---- FAQ ---- */
+function toggleFaq(el) {
+  el.nextElementSibling.classList.toggle('open');
+}
+
+/* ---- Utilities ---- */
+function exportReport(type) {
+  alert('Mengekspor laporan ke ' + type + '...\nFile akan diunduh dalam beberapa detik.');
+}
+
+function simulateRefresh() {
+  const btn = document.querySelector('.tb-btn');
+  btn.innerHTML = '<i class="ti ti-loader" aria-hidden="true"></i> Memuat...';
+  setTimeout(() => { btn.innerHTML = '<i class="ti ti-refresh" aria-hidden="true"></i> Refresh'; }, 1500);
+}
+
+function switchTab(el, group) {
+  el.closest('.chart-tabs').querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ---- Realtime Detection Cycle ---- */
+const emojis = ['🧴','📄','🥬','🥫','🍾','📦'];
+const names  = ['Plastik','Kertas','Organik','Logam','Kaca','Anorganik'];
+let ei = 0;
+setInterval(() => {
+  ei = (ei + 1) % emojis.length;
+  const e = document.getElementById('detected-emoji');
+  const c = document.getElementById('detected-class');
+  if (e && c) { e.textContent = emojis[ei]; c.textContent = names[ei]; }
+}, 3000);
+</script>
+
+</body>
+</html>

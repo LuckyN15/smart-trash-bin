@@ -1,0 +1,507 @@
+/* ========================================
+   SMART BIN IoT — login.css
+   Extends style.css design tokens
+   ======================================== */
+
+html, body {
+  min-height: 100vh;
+}
+
+body.login-body {
+  background: var(--sb-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Ambient backdrop glow — subtle, restrained */
+body.login-body::before {
+  content: '';
+  position: fixed;
+  top: -200px;
+  left: -160px;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(0, 212, 170, 0.10), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.login-body::after {
+  content: '';
+  position: fixed;
+  bottom: -220px;
+  right: -180px;
+  width: 560px;
+  height: 560px;
+  background: radial-gradient(circle, rgba(33, 150, 243, 0.08), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.login-shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  max-width: 940px;
+  min-height: 560px;
+  background: var(--sb-surface);
+  border: 1px solid var(--sb-border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* ========================================
+   BRAND PANEL (left)
+   ======================================== */
+.login-brand {
+  flex: 0 0 42%;
+  position: relative;
+  padding: 32px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(0, 212, 170, 0.16), transparent 55%),
+    radial-gradient(circle at 90% 85%, rgba(33, 150, 243, 0.14), transparent 50%),
+    var(--sb-surface2);
+  border-right: 1px solid var(--sb-border);
+  overflow: hidden;
+}
+
+.brand-glow {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  top: -90px;
+  right: -90px;
+  background: radial-gradient(circle, rgba(0, 212, 170, 0.18), transparent 70%);
+  animation: brandPulse 6s ease-in-out infinite;
+}
+
+@keyframes brandPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50%      { transform: scale(1.12); opacity: 1; }
+}
+
+.brand-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.brand-mid {
+  position: relative;
+  z-index: 1;
+  margin-top: 28px;
+}
+
+.brand-mid h1 {
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--sb-text);
+  margin-bottom: 10px;
+  letter-spacing: -0.2px;
+}
+
+.brand-mid p {
+  font-size: 12.5px;
+  color: var(--sb-muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  max-width: 320px;
+}
+
+.brand-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.brand-features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--sb-text);
+}
+
+.brand-features li i {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  background: rgba(0, 212, 170, 0.12);
+  color: var(--sb-accent);
+  font-size: 14px;
+}
+
+.brand-status {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--sb-muted);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sb-success);
+  box-shadow: 0 0 6px var(--sb-success);
+  flex-shrink: 0;
+}
+
+/* ========================================
+   FORM PANEL (right)
+   ======================================== */
+.login-form-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 36px 44px;
+  background: var(--sb-surface);
+}
+
+.login-form-wrap {
+  max-width: 320px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.login-form-head h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--sb-text);
+  margin-bottom: 5px;
+}
+
+.login-form-head p {
+  font-size: 12px;
+  color: var(--sb-muted);
+  margin-bottom: 26px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-label {
+  font-size: 11.5px;
+  color: var(--sb-muted);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.input-icon-wrap {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.input-icon-wrap i.ti-user,
+.input-icon-wrap i.ti-lock {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--sb-muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.input-icon-wrap input[type="text"],
+.input-icon-wrap input[type="password"],
+.input-icon-wrap input[type="email"] {
+  padding-left: 34px;
+  padding-right: 34px;
+}
+
+.toggle-pass {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--sb-muted);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.toggle-pass:hover {
+  color: var(--sb-text);
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 4px 0 20px;
+}
+
+.remember-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--sb-muted);
+}
+
+.remember-row .toggle {
+  width: 30px;
+  height: 17px;
+}
+
+.remember-row .toggle::after {
+  width: 11px;
+  height: 11px;
+}
+
+.remember-row .toggle.on::after {
+  left: 15px;
+}
+
+.forgot-link {
+  font-size: 12px;
+  color: var(--sb-accent);
+  text-decoration: none;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 9px 14px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.login-btn-secondary {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 9px 14px;
+  font-size: 12.5px;
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 22px 0 0;
+  font-size: 11px;
+  color: var(--sb-muted);
+}
+
+.login-divider::before,
+.login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--sb-border);
+}
+
+.login-divider span {
+  padding: 0 10px;
+}
+
+.login-footnote {
+  text-align: center;
+  font-size: 12px;
+  color: var(--sb-muted);
+  margin-top: 22px;
+}
+
+.login-footnote a {
+  color: var(--sb-accent);
+  text-decoration: none;
+}
+
+.login-footnote a:hover {
+  text-decoration: underline;
+}
+
+.login-page-footer {
+  text-align: center;
+  font-size: 10.5px;
+  color: var(--sb-muted);
+  opacity: 0.7;
+  margin-top: 24px;
+}
+
+.field-error {
+  font-size: 11px;
+  color: var(--sb-danger);
+  margin: -10px 0 12px;
+  display: none;
+}
+
+.field-error.show {
+  display: block;
+}
+
+/* Server-rendered Blade errors are always shown when present */
+.field-error.server {
+  display: block;
+}
+
+.input-icon-wrap.has-error input {
+  border-color: var(--sb-danger);
+}
+
+/* ========================================
+   NATIVE CHECKBOX TOGGLE (Ingat saya)
+   Real <input type="checkbox" name="remember">
+   styled to look like the dashboard's .toggle
+   ======================================== */
+.toggle-switch {
+  position: relative;
+  width: 30px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.toggle-track {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--sb-surface2);
+  border: 1px solid var(--sb-border);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.toggle-track::after {
+  content: '';
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  background: #fff;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: left 0.2s;
+}
+
+.toggle-switch input:checked ~ .toggle-track {
+  background: var(--sb-accent);
+}
+
+.toggle-switch input:checked ~ .toggle-track::after {
+  left: 15px;
+}
+
+.toggle-switch input:focus-visible ~ .toggle-track {
+  outline: 2px solid var(--sb-accent);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   SESSION STATUS (e.g. "password reset link sent")
+   ======================================== */
+.auth-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--sb-success);
+  background: rgba(63, 185, 80, 0.12);
+  border: 1px solid rgba(63, 185, 80, 0.3);
+  border-radius: 8px;
+  padding: 9px 12px;
+  margin-bottom: 18px;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 760px) {
+  .login-shell {
+    flex-direction: column;
+    max-width: 420px;
+    min-height: auto;
+  }
+
+  .login-brand {
+    flex: none;
+    border-right: none;
+    border-bottom: 1px solid var(--sb-border);
+    padding: 24px;
+  }
+
+  .brand-mid {
+    margin-top: 18px;
+  }
+
+  .brand-mid p {
+    display: none;
+  }
+
+  .brand-features {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .brand-features li span {
+    display: none;
+  }
+
+  .brand-status {
+    margin-top: 16px;
+  }
+
+  .login-form-panel {
+    padding: 28px 26px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-glow {
+    animation: none;
+  }
+}
+
+/* Keyboard accessibility */
+a:focus-visible,
+input:focus-visible,
+.toggle:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--sb-accent);
+  outline-offset: 2px;
+}
